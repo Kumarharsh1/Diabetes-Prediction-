@@ -127,4 +127,73 @@ if (prediction[0] == 0):
   print('The person is not diabetic')
 else:
   print('The person is diabetic')
+    import streamlit as st
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score
+
+# Title
+st.title("🩺 Diabetes Prediction App")
+
+# Load Data
+try:
+    diabetes_dataset = pd.read_csv("diabetes-app/diabetes.csv")  # Adjust path if needed
+    st.subheader("🔍 First 5 Rows of the Dataset")
+    st.dataframe(diabetes_dataset.head())
+except Exception as e:
+    st.error(f"❌ Error loading data: {e}")
+
+# Data Visualization
+st.subheader("📈 Correlation Heatmap")
+fig, ax = plt.subplots()
+sns.heatmap(diabetes_dataset.corr(), annot=True, cmap="coolwarm", ax=ax)
+st.pyplot(fig)
+
+st.subheader("🧮 Outcome Distribution")
+st.bar_chart(diabetes_dataset["Outcome"].value_counts())
+
+# Preprocessing
+X = diabetes_dataset.drop(columns="Outcome", axis=1)
+y = diabetes_dataset["Outcome"]
+scaler = StandardScaler()
+X_scaled = scaler.fit_transform(X)
+
+X_train, X_test, y_train, y_test = train_test_split(X_scaled, y, test_size=0.2, random_state=42)
+
+# Model Training
+model = LogisticRegression()
+model.fit(X_train, y_train)
+y_pred = model.predict(X_test)
+
+st.subheader("✅ Model Accuracy")
+st.write(f"Accuracy: {accuracy_score(y_test, y_pred):.2f}")
+
+# Sidebar Input for Prediction
+st.sidebar.header("🔍 Enter Patient Data")
+
+def user_input():
+    glucose = st.sidebar.slider("Glucose", 0, 200, 120)
+    bp = st.sidebar.slider("BloodPressure", 0, 122, 70)
+    skin = st.sidebar.slider("SkinThickness", 0, 99, 20)
+    insulin = st.sidebar.slider("Insulin", 0, 846, 79)
+    bmi = st.sidebar.slider("BMI", 0.0, 67.1, 25.0)
+    dpf = st.sidebar.slider("DiabetesPedigreeFunction", 0.0, 2.5, 0.5)
+    age = st.sidebar.slider("Age", 10, 90, 33)
+    preg = st.sidebar.slider("Pregnancies", 0, 20, 2)
+    return [preg, glucose, bp, skin, insulin, bmi, dpf, age]
+
+input_data = user_input()
+input_array = scaler.transform([input_data])
+prediction = model.predict(input_array)[0]
+
+# Prediction Output
+st.subheader("🩺 Prediction Result")
+if prediction == 1:
+    st.error("🚨 Predicted: Diabetic")
+else:
+    st.success("✅ Predicted: Non-Diabetic")
 
