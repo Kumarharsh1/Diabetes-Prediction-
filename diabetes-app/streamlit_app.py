@@ -23,13 +23,20 @@ PIMA Diabetes Dataset
 
 # loading the diabetes dataset to a pandas DataFrame
 # Load the dataset
-import pandas as pd
 import streamlit as st
+import pandas as pd
 
+# Load the dataset safely
 try:
-    diabetes = pd.read_csv("diabetes.csv")  # adjust path if needed
+    diabetes_dataset = pd.read_csv('diabetes.csv')
+    st.success("✅ Dataset loaded successfully!")
 except Exception as e:
-    st.error(f"Error loading diabetes.csv: {e}")
+    st.error(f"❌ Error loading 'diabetes.csv': {e}")
+    st.stop()
+
+# Use the dataset only after successful load
+st.subheader("🔍 First 5 rows of the dataset:")
+st.dataframe(diabetes_dataset.head())
 
 
 # printing the first 5 rows of the dataset
