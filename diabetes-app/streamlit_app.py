@@ -127,7 +127,7 @@ if (prediction[0] == 0):
   print('The person is not diabetic')
 else:
   print('The person is diabetic')
-    import streamlit as st
+import streamlit as st
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
