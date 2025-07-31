@@ -24,10 +24,12 @@ PIMA Diabetes Dataset
 # loading the diabetes dataset to a pandas DataFrame
 # Load the dataset
 import pandas as pd
+import streamlit as st
 
-diabetes = pd.read_csv("diabetes-app/diabetes.csv")
+# Load the dataset
+diabetes_dataset = pd.read_csv("diabetes-app/diabetes.csv")  # Adjust path if needed
 
-# Use the dataset only after successful load
+# Display the first 5 rows
 st.subheader("🔍 First 5 rows of the dataset:")
 st.dataframe(diabetes_dataset.head())
 
