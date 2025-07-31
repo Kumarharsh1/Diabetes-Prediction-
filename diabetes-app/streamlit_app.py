@@ -22,7 +22,7 @@ PIMA Diabetes Dataset
 """
 
 # loading the diabetes dataset to a pandas DataFrame
-diabetes_dataset = pd.read_csv('diabetes.csv')
+pd.read_csv("diabetes-app/diabetes.csv")
 
 # printing the first 5 rows of the dataset
 diabetes_dataset.head()
